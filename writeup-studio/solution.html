@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Solution - Solution Blog</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-page="solution">
+    <header class="top">
+        <div>
+            <p class="eyebrow" id="contestCrumb">Solution Blog</p>
+            <h1 id="solutionPageTitle">Solution</h1>
+            <p class="lead" id="solutionPageLead">Read the saved problem notes, solution explanation, and final C++ code.</p>
+        </div>
+        <div class="nav-actions">
+            <a class="home" id="editSolutionLink" href="#">Edit</a>
+            <a class="home" id="backToContest" href="./">Contest</a>
+            <a class="home" id="backToPlatform" href="./">Platform</a>
+            <a class="home" href="./">Platforms</a>
+        </div>
+    </header>
+
+    <main class="shell">
+        <section class="panel editor" id="editorPanel" aria-label="solution editor">
+            <div class="row two">
+                <label>
+                    <span>Problem Title</span>
+                    <input id="title" type="text" placeholder="C2. Seating Arrangement">
+                </label>
+                <label>
+                    <span>Problem URL</span>
+                    <input id="url" type="url" placeholder="https://codeforces.com/...">
+                </label>
+            </div>
+
+            <div class="toolbar" aria-label="text formatting toolbar">
+                <button type="button" data-cmd="bold"><strong>B</strong></button>
+                <button type="button" data-size="small">Small</button>
+                <button type="button" data-size="normal">Normal</button>
+                <button type="button" data-size="large">Large</button>
+                <button type="button" class="color-swatch red" data-color="rgb(255,77,109)" title="Red text" aria-label="Red text"></button>
+                <button type="button" class="color-swatch green" data-color="rgb(57,208,176)" title="Green text" aria-label="Green text"></button>
+                <button type="button" class="color-swatch blue" data-color="rgb(0,229,255)" title="Blue text" aria-label="Blue text"></button>
+                <button type="button" class="color-swatch white" data-color="rgb(244,241,234)" title="White text" aria-label="White text"></button>
+                <button type="button" data-cmd="insertUnorderedList">List</button>
+                <button type="button" id="insertCodeBlock">``` Code</button>
+                <button type="button" id="clearFormat">Clear</button>
+            </div>
+
+            <label class="block">
+                <span>Problem Description</span>
+                <div id="problemDescription" class="doc" data-rich-editor contenteditable="true" spellcheck="true" data-placeholder="Paste or summarize the problem statement here."></div>
+            </label>
+
+            <label class="block">
+                <span>Solution Writeup</span>
+                <div id="solutionDescription" class="doc" data-rich-editor contenteditable="true" spellcheck="true" data-placeholder="Write the intuition, proof idea, transitions, and implementation details here."></div>
+            </label>
+
+            <label class="block">
+                <span>C++ Code</span>
+                <textarea id="code" spellcheck="false" placeholder="#include &lt;bits/stdc++.h&gt;&#10;using namespace std;&#10;&#10;void solve() {&#10;    &#10;}"></textarea>
+            </label>
+
+            <div class="actions">
+                <button type="button" id="previewBtn">Update Preview</button>
+                <button type="button" id="saveBtn">Save Solution</button>
+                <button type="button" id="loadBtn">Reload Solution</button>
+                <button type="button" id="deleteSolutionBtn">Delete Solution</button>
+                <button type="button" id="exportBtn">Export HTML</button>
+            </div>
+            <p class="note">Both rich text sections use the same toolbar. Click inside the section you want to format.</p>
+        </section>
+
+        <section class="panel preview" aria-label="solution preview">
+            <div class="preview-head">
+                <p class="eyebrow">Preview</p>
+                <h2 id="previewTitle">Untitled Problem</h2>
+                <a id="previewUrl" href="#" target="_blank" rel="noreferrer">Problem link</a>
+            </div>
+            <div class="preview-section problem-preview">
+                <span>Problem Description</span>
+                <article id="previewProblemDescription" class="preview-body"></article>
+            </div>
+            <div class="preview-section solution-preview">
+                <span>Solution Writeup</span>
+                <article id="previewSolutionDescription" class="preview-body"></article>
+            </div>
+            <div class="preview-section code-preview" id="previewCodeSection">
+                <span>C++ Code</span>
+                <pre><code id="previewCode" class="language-cpp"></code></pre>
+            </div>
+        </section>
+    </main>
+
+    <script src="./script.js"></script>
+</body>
+</html>

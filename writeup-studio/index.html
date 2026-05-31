@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Solution Blog</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-page="platforms">
+    <header class="top">
+        <div>
+            <p class="eyebrow">Contest Notes</p>
+            <h1>Solution Blog</h1>
+            <p class="lead">My remembering notes for contests I participated in: create a platform, add contests, then save solutions inside them.</p>
+        </div>
+        <div class="nav-actions">
+            <a class="home" href="../">All Writeups</a>
+            <button type="button" id="exportDataBtn">Export data.json</button>
+        </div>
+    </header>
+
+    <main class="page-shell">
+        <section class="panel editor" aria-label="create platform">
+            <div class="library-create">
+                <label>
+                    <span>Platform Name</span>
+                    <input id="platformName" type="text" placeholder="Codeforces">
+                </label>
+                <label>
+                    <span>Platform URL</span>
+                    <input id="platformUrl" type="url" placeholder="https://codeforces.com">
+                </label>
+                <button type="button" id="createPlatformBtn">Create Platform</button>
+            </div>
+            <p id="storageHint" class="note">Published writeups load from data.json. Browser edits stay local until exported.</p>
+        </section>
+
+        <section class="contest-grid" id="platformList" aria-label="saved platforms"></section>
+    </main>
+
+    <script src="./script.js"></script>
+</body>
+</html>

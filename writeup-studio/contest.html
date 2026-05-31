@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Contest - Solution Blog</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-page="contest">
+    <header class="top">
+        <div>
+            <p class="eyebrow">Solution Blog</p>
+            <h1 id="contestTitle">Contest</h1>
+            <p class="lead" id="contestMeta">Solutions saved inside this contest.</p>
+        </div>
+        <div class="nav-actions">
+            <a class="home" id="backToPlatform" href="./">Platform</a>
+            <a class="home" href="./">Platforms</a>
+            <button type="button" id="deleteContestBtn">Delete Contest</button>
+        </div>
+    </header>
+
+    <main class="page-shell">
+        <section class="panel editor" aria-label="create solution">
+            <div class="library-create">
+                <label>
+                    <span>Solution Title</span>
+                    <input id="newSolutionTitle" type="text" placeholder="A. Problem Name">
+                </label>
+                <label>
+                    <span>Problem URL</span>
+                    <input id="newSolutionUrl" type="url" placeholder="https://codeforces.com/...">
+                </label>
+                <button type="button" id="newSolutionBtn">New Solution</button>
+            </div>
+        </section>
+
+        <section class="contest-grid" id="solutionList" aria-label="saved solutions"></section>
+    </main>
+
+    <script src="./script.js"></script>
+</body>
+</html>

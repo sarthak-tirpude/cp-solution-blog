@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Platform - Solution Blog</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body data-page="platform">
+    <header class="top">
+        <div>
+            <p class="eyebrow">Solution Blog</p>
+            <h1 id="platformTitle">Platform</h1>
+            <p class="lead" id="platformMeta">Contests saved inside this platform.</p>
+        </div>
+        <div class="nav-actions">
+            <a class="home" href="./">Platforms</a>
+            <button type="button" id="deletePlatformBtn">Delete Platform</button>
+        </div>
+    </header>
+
+    <main class="page-shell">
+        <section class="panel editor" aria-label="create contest">
+            <div class="library-create">
+                <label>
+                    <span>Contest Name</span>
+                    <input id="contestName" type="text" placeholder="Codeforces Round 1101">
+                </label>
+                <label>
+                    <span>Contest URL</span>
+                    <input id="contestUrl" type="url" placeholder="https://codeforces.com/contest/...">
+                </label>
+                <button type="button" id="createContestBtn">Create Contest</button>
+            </div>
+        </section>
+
+        <section class="panel editor search-panel" aria-label="search contests">
+            <label>
+                <span>Search Contests</span>
+                <input id="contestSearch" type="search" placeholder="Search by contest name or URL">
+            </label>
+        </section>
+
+        <section class="contest-grid" id="contestList" aria-label="saved contests"></section>
+    </main>
+
+    <script src="./script.js"></script>
+</body>
+</html>
