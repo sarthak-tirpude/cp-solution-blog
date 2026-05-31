@@ -350,17 +350,19 @@ function normalizeFontTags(root) {
 }
 
 function stripPastedPaint(root) {
+    root.querySelectorAll("style, script, link, meta").forEach((node) => node.remove());
+
     root.querySelectorAll("*").forEach((node) => {
         node.removeAttribute("bgcolor");
         node.removeAttribute("background");
         node.removeAttribute("color");
+        node.removeAttribute("class");
+        node.removeAttribute("id");
 
         if(node.hasAttribute("style")) {
-            node.style.background = "";
-            node.style.backgroundColor = "";
-            node.style.color = "";
-            node.style.webkitTextFillColor = "";
-            node.style.textShadow = "";
+            ["background", "background-color", "background-image", "color", "-webkit-text-fill-color", "text-shadow", "box-shadow"].forEach((property) => {
+                node.style.removeProperty(property);
+            });
 
             if(!node.getAttribute("style").trim()) {
                 node.removeAttribute("style");
@@ -774,6 +776,7 @@ function applyDraft(solution) {
     $("#problemDescription").innerHTML = draft.problemDescription || "";
     $("#solutionDescription").innerHTML = draft.solutionDescription || "";
     $("#code").value = draft.code || "";
+    stripPastedPaint($("#problemDescription"));
     activeEditor = $("#solutionDescription");
     updatePreview();
 }
@@ -1156,7 +1159,10 @@ function bindRichToolbar() {
             saveSelection();
             updateToolbarState();
         });
-        editor.addEventListener("input", updatePreview);
+        editor.addEventListener("input", () => {
+            if(editor.id === "problemDescription") stripPastedPaint(editor);
+            updatePreview();
+        });
         editor.addEventListener("keyup", saveSelection);
         editor.addEventListener("mouseup", saveSelection);
     });
