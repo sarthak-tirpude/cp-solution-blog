@@ -349,6 +349,54 @@ function normalizeFontTags(root) {
     });
 }
 
+function stripPastedPaint(root) {
+    root.querySelectorAll("*").forEach((node) => {
+        node.removeAttribute("bgcolor");
+        node.removeAttribute("background");
+        node.removeAttribute("color");
+
+        if(node.hasAttribute("style")) {
+            node.style.background = "";
+            node.style.backgroundColor = "";
+            node.style.color = "";
+            node.style.webkitTextFillColor = "";
+            node.style.textShadow = "";
+
+            if(!node.getAttribute("style").trim()) {
+                node.removeAttribute("style");
+            }
+        }
+    });
+}
+
+function htmlFromPlainText(text) {
+    return escapeHtml(text)
+        .replace(/\r\n/g, "\n")
+        .replace(/\r/g, "\n")
+        .split(/\n{2,}/)
+        .map((part) => `<p>${part.replace(/\n/g, "<br>")}</p>`)
+        .join("");
+}
+
+function sanitizeProblemPaste(event) {
+    event.preventDefault();
+    activeEditor = $("#problemDescription");
+
+    const clipboard = event.clipboardData || window.clipboardData;
+    const html = clipboard?.getData("text/html") || "";
+    const text = clipboard?.getData("text/plain") || "";
+    const wrap = document.createElement("div");
+
+    if(html) wrap.innerHTML = html;
+    else wrap.innerHTML = htmlFromPlainText(text);
+
+    stripPastedPaint(wrap);
+    document.execCommand("insertHTML", false, wrap.innerHTML);
+    saveSelection();
+    updateToolbarState();
+    updatePreview();
+}
+
 function highlightCodeBlocks(root) {
     root.querySelectorAll("pre").forEach((pre) => {
         const text = pre.textContent;
@@ -363,6 +411,7 @@ function renderRichEditor(editor) {
     if(!rawText.includes("```")) {
         const wrap = document.createElement("div");
         wrap.innerHTML = editor.innerHTML;
+        if(editor.id === "problemDescription") stripPastedPaint(wrap);
         normalizeFontTags(wrap);
         highlightCodeBlocks(wrap);
         return wrap.innerHTML;
@@ -704,7 +753,10 @@ function insertCodeBlock() {
 function currentDraft() {
     const problemDescription = $("#problemDescription");
     const solutionDescription = $("#solutionDescription");
-    if(problemDescription) normalizeFontTags(problemDescription);
+    if(problemDescription) {
+        stripPastedPaint(problemDescription);
+        normalizeFontTags(problemDescription);
+    }
     if(solutionDescription) normalizeFontTags(solutionDescription);
     return {
         title: $("#title")?.value || "",
@@ -1108,6 +1160,8 @@ function bindRichToolbar() {
         editor.addEventListener("keyup", saveSelection);
         editor.addEventListener("mouseup", saveSelection);
     });
+
+    $("#problemDescription")?.addEventListener("paste", sanitizeProblemPaste);
 
     $all("[data-cmd]").forEach((button) => {
         button.addEventListener("mousedown", (event) => event.preventDefault());
