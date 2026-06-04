@@ -480,13 +480,30 @@ textarea {
     width: 100%;
 }
 
+.preview-only .preview-section {
+    width: 100%;
+}
+
 .preview-only .preview-body {
     width: 100%;
     max-width: none;
 }
 
 .preview-only .preview-body > * {
-    max-width: 100% !important;
+    width: auto !important;
+    max-width: none !important;
+}
+
+.preview-only .preview-body pre {
+    display: block;
+    width: 100% !important;
+    max-width: none !important;
+    margin-inline: 0;
+}
+
+.preview-only .preview-body code {
+    display: block;
+    width: 100%;
 }
 
 pre {
