@@ -469,7 +469,13 @@ textarea {
 
 .preview-only .shell {
     display: block;
-    width: min(110rem, calc(100% - var(--page-pad)));
+    width: calc(100% - var(--page-pad));
+    max-width: none;
+}
+
+.preview-only .top {
+    width: calc(100% - var(--page-pad));
+    max-width: none;
 }
 
 .preview-only #editorPanel {
@@ -492,6 +498,18 @@ textarea {
 .preview-only .preview-body > * {
     width: auto !important;
     max-width: none !important;
+}
+
+.preview-body pre {
+    display: block;
+    width: 100% !important;
+    max-width: none !important;
+    margin-inline: 0;
+}
+
+.preview-body code {
+    display: block;
+    width: 100%;
 }
 
 .preview-only .preview-body pre {

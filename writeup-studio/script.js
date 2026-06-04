@@ -371,6 +371,26 @@ function stripPastedPaint(root) {
     });
 }
 
+function stripPastedLayout(root) {
+    root.querySelectorAll("style, script, link, meta").forEach((node) => node.remove());
+
+    root.querySelectorAll("*").forEach((node) => {
+        node.removeAttribute("width");
+        node.removeAttribute("height");
+        node.removeAttribute("align");
+
+        if(node.hasAttribute("style")) {
+            ["width", "max-width", "min-width", "height", "max-height", "min-height", "margin-left", "margin-right", "float", "position", "left", "right"].forEach((property) => {
+                node.style.removeProperty(property);
+            });
+
+            if(!node.getAttribute("style").trim()) {
+                node.removeAttribute("style");
+            }
+        }
+    });
+}
+
 function htmlFromPlainText(text) {
     return escapeHtml(text)
         .replace(/\r\n/g, "\n")
@@ -414,6 +434,7 @@ function renderRichEditor(editor) {
         const wrap = document.createElement("div");
         wrap.innerHTML = editor.innerHTML;
         if(editor.id === "problemDescription") stripPastedPaint(wrap);
+        stripPastedLayout(wrap);
         normalizeFontTags(wrap);
         highlightCodeBlocks(wrap);
         return wrap.innerHTML;
