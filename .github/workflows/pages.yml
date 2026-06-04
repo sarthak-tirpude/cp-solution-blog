@@ -31,8 +31,7 @@ jobs:
         run: |
           mkdir -p _site
           cp index.html _site/index.html
-          cp -R codeforces _site/codeforces
-          cp -R leetcode _site/leetcode
+          cp -R writeup-studio _site/writeup-studio
 
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
