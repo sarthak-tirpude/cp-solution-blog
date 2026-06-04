@@ -1,0 +1,6 @@
+bin/
+*.out
+*.exe
+*.dSYM/
+.DS_Store
+output.txt

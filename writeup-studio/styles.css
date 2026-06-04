@@ -468,11 +468,25 @@ textarea {
 }
 
 .preview-only .shell {
-    grid-template-columns: minmax(0, 1fr);
+    display: block;
+    width: min(110rem, calc(100% - var(--page-pad)));
 }
 
 .preview-only #editorPanel {
     display: none;
+}
+
+.preview-only .preview {
+    width: 100%;
+}
+
+.preview-only .preview-body {
+    width: 100%;
+    max-width: none;
+}
+
+.preview-only .preview-body > * {
+    max-width: 100% !important;
 }
 
 pre {
