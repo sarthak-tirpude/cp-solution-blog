@@ -423,6 +423,8 @@ textarea {
 .preview-body {
     padding: 1rem clamp(1rem, 2vw, 1.375rem) clamp(1rem, 2vw, 1.375rem);
     color: #ded8ce;
+    width: 100%;
+    max-width: none;
 }
 
 .preview-body p {
@@ -498,6 +500,36 @@ textarea {
 .preview-only .preview-body > * {
     width: auto !important;
     max-width: none !important;
+}
+
+#previewSolutionDescription,
+#previewSolutionDescription > *,
+#solutionDescription,
+#solutionDescription > * {
+    max-width: none !important;
+}
+
+#previewSolutionDescription :is(div, p, section, article, blockquote, pre, ul, ol, table),
+#solutionDescription :is(div, p, section, article, blockquote, pre, ul, ol, table) {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+#previewSolutionDescription table,
+#solutionDescription table {
+    display: table !important;
+}
+
+#previewSolutionDescription pre,
+#solutionDescription pre {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
 .preview-body pre {

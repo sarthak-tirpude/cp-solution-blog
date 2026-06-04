@@ -375,18 +375,48 @@ function stripPastedLayout(root) {
     root.querySelectorAll("style, script, link, meta").forEach((node) => node.remove());
 
     root.querySelectorAll("*").forEach((node) => {
+        node.removeAttribute("class");
+        node.removeAttribute("id");
         node.removeAttribute("width");
         node.removeAttribute("height");
         node.removeAttribute("align");
 
         if(node.hasAttribute("style")) {
-            ["width", "max-width", "min-width", "height", "max-height", "min-height", "margin-left", "margin-right", "float", "position", "left", "right"].forEach((property) => {
+            ["display", "width", "max-width", "min-width", "height", "max-height", "min-height", "margin-left", "margin-right", "float", "position", "left", "right", "transform", "overflow", "overflow-x"].forEach((property) => {
                 node.style.removeProperty(property);
             });
 
             if(!node.getAttribute("style").trim()) {
                 node.removeAttribute("style");
             }
+        }
+    });
+}
+
+function forceSolutionWidth(root) {
+    if(!root) return;
+
+    root.style.display = "block";
+    root.style.width = "100%";
+    root.style.maxWidth = "none";
+
+    const wideTags = new Set(["DIV", "P", "SECTION", "ARTICLE", "BLOCKQUOTE", "PRE", "UL", "OL", "TABLE"]);
+    root.querySelectorAll("*").forEach((node) => {
+        node.removeAttribute("width");
+        node.removeAttribute("align");
+
+        if(node.hasAttribute("style")) {
+            ["width", "max-width", "min-width", "margin-left", "margin-right", "float", "position", "left", "right", "transform", "overflow", "overflow-x"].forEach((property) => {
+                node.style.removeProperty(property);
+            });
+        }
+
+        if(wideTags.has(node.tagName)) {
+            node.style.display = node.tagName === "TABLE" ? "table" : "block";
+            node.style.width = "100%";
+            node.style.maxWidth = "none";
+            node.style.marginLeft = "0";
+            node.style.marginRight = "0";
         }
     });
 }
@@ -413,6 +443,26 @@ function sanitizeProblemPaste(event) {
     else wrap.innerHTML = htmlFromPlainText(text);
 
     stripPastedPaint(wrap);
+    document.execCommand("insertHTML", false, wrap.innerHTML);
+    saveSelection();
+    updateToolbarState();
+    updatePreview();
+}
+
+function sanitizeSolutionPaste(event) {
+    event.preventDefault();
+    activeEditor = $("#solutionDescription");
+
+    const clipboard = event.clipboardData || window.clipboardData;
+    const html = clipboard?.getData("text/html") || "";
+    const text = clipboard?.getData("text/plain") || "";
+    const wrap = document.createElement("div");
+
+    if(html) wrap.innerHTML = html;
+    else wrap.innerHTML = htmlFromPlainText(text);
+
+    stripPastedLayout(wrap);
+    normalizeFontTags(wrap);
     document.execCommand("insertHTML", false, wrap.innerHTML);
     saveSelection();
     updateToolbarState();
@@ -778,9 +828,13 @@ function currentDraft() {
     const solutionDescription = $("#solutionDescription");
     if(problemDescription) {
         stripPastedPaint(problemDescription);
+        stripPastedLayout(problemDescription);
         normalizeFontTags(problemDescription);
     }
-    if(solutionDescription) normalizeFontTags(solutionDescription);
+    if(solutionDescription) {
+        stripPastedLayout(solutionDescription);
+        normalizeFontTags(solutionDescription);
+    }
     return {
         title: $("#title")?.value || "",
         url: $("#url")?.value || "",
@@ -798,6 +852,10 @@ function applyDraft(solution) {
     $("#solutionDescription").innerHTML = draft.solutionDescription || "";
     $("#code").value = draft.code || "";
     stripPastedPaint($("#problemDescription"));
+    stripPastedLayout($("#problemDescription"));
+    stripPastedLayout($("#solutionDescription"));
+    normalizeFontTags($("#problemDescription"));
+    normalizeFontTags($("#solutionDescription"));
     activeEditor = $("#solutionDescription");
     updatePreview();
 }
@@ -813,6 +871,7 @@ function updatePreview() {
     $("#previewTitle").textContent = title;
     $("#previewProblemDescription").innerHTML = problemHtml;
     $("#previewSolutionDescription").innerHTML = solutionHtml;
+    forceSolutionWidth($("#previewSolutionDescription"));
     $("#previewProblemDescription").closest(".preview-section").hidden = !problemHtml;
     $("#previewSolutionDescription").closest(".preview-section").hidden = !solutionHtml;
     $("#previewCode").innerHTML = highlightCpp(code);
@@ -1182,6 +1241,7 @@ function bindRichToolbar() {
         });
         editor.addEventListener("input", () => {
             if(editor.id === "problemDescription") stripPastedPaint(editor);
+            stripPastedLayout(editor);
             updatePreview();
         });
         editor.addEventListener("keyup", saveSelection);
@@ -1189,6 +1249,7 @@ function bindRichToolbar() {
     });
 
     $("#problemDescription")?.addEventListener("paste", sanitizeProblemPaste);
+    $("#solutionDescription")?.addEventListener("paste", sanitizeSolutionPaste);
 
     $all("[data-cmd]").forEach((button) => {
         button.addEventListener("mousedown", (event) => event.preventDefault());
